@@ -8,6 +8,7 @@ import plotly.express as px
 
 import logging
 
+import random
 import numpy
 import sqlite3
 import pandas
@@ -68,25 +69,8 @@ waveform_data_header_dtype = numpy.dtype([('header_size', 'i4'),
 def script_main(
         directory:Path,
         output_directory:Path,
-        #measurement_name:str,
-
         plot_waveforms:bool=False,
         save_buffers:bool=False,
-
-        ## Beta Scan
-        #path_to_directory_in_which_to_store_data:Path,
-        #measurement_name:str,
-        #name_to_access_to_the_setup:str,
-        #slot_number:int,
-        #n_triggers:int,
-        #bias_voltage:float,
-        #software_trigger=None,
-        #silent=False,
-        #telegram_progress_reporter:TelegramReporter=None,
-        # Plot individual
-        #directory: Path, dut_name: str, force: bool=False,
-        # Plot single point
-        #directory: Path,
         ):
 
     script_logger = logging.getLogger('convert_scope')
@@ -97,6 +81,14 @@ def script_main(
 
     John = RM.RunManager(output_directory.resolve())
     John.create_run(raise_error=True)
+
+    if not plot_waveforms:
+        numFiles = len(list(directory.glob('wav*.bin')))
+        if numFiles < 10:
+            plot_waveforms = True
+        else:
+            waveform_plot_list = random.sample(range(1, numFiles), 10)
+
 
     with John.handle_task("convert_scope_data") as Oliver:
         # Copied data location
@@ -442,7 +434,7 @@ def script_main(
                                                         #ignore_index=True
                                                        )
 
-                        if plot_waveforms:
+                        if plot_waveforms or n_trigger in waveform_plot_list:
                             plot_dir = Oliver.task_path/path.name
                             plot_dir.resolve()
                             plot_dir.mkdir(exist_ok=True)
@@ -593,6 +585,7 @@ def script_main(
         shutil.rmtree(copied_data)
         del copied_data
     del Oliver
+    del waveform_plot_list
 
     script_logger.info('Finished converting to sqlite format...')
 
@@ -605,7 +598,7 @@ def script_main(
             x_start_var = x_start_df["x"].var()
             average_waveform_df = waveforms_df.groupby(["channel_idx", "waveform_idx", "x_idx"]).mean().drop(columns=["n_trigger"])
 
-            print(x_start_df)
+            #print(x_start_df)
 
             plot_dir = Mike.task_path#/"summary"
             plot_dir.resolve()
