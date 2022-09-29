@@ -463,7 +463,7 @@ def script_main(
 
                             del fig
 
-                        if len(waveforms_df.index) > 1e6:
+                        if len(waveforms_df.index) > 2e6:
                             script_logger.info('Saving run metadata into database...')
                             run_metadata_df.to_sql('run_metadata',
                                                    sqlite3_connection,
