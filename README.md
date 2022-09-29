@@ -17,6 +17,7 @@ python -m pip install plotly
 python -m pip install numpy
 python -m pip install pandas
 python -m pip install lip-pps-run-manager
+python -m pip install tqdm
 ```
 
 You are now ready to run the scripts.

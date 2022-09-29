@@ -17,6 +17,8 @@ import lip_pps_run_manager as RM
 
 from math import sqrt
 
+from tqdm import tqdm
+
 # structures for parsing the binary file format
 
 def InfiniiumUnitsToString(unit:int):
@@ -114,7 +116,7 @@ def script_main(
             # TODO: How to guarantee the order of the files?
             n_trigger = 0
             channel_map = {}
-            for path in copied_data.glob('wav*.bin'): # Loop on binary waveform files
+            for path in tqdm (copied_data.glob('wav*.bin'), desc="Converting Scope data..."): # Loop on binary waveform files
                 script_logger.info("  Processing run {}".format(path.name))
 
                 with path.open(mode='rb') as runFile: # Open the file
