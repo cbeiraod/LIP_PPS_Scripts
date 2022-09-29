@@ -596,11 +596,13 @@ def script_main(
             script_logger.info('Calculating average waveform...')
             # Make average plot
             waveforms_df = pandas.read_sql('SELECT * from waveforms', sqlite3_connection)
-            x_start_df = waveforms_df[waveforms_df["x_idx"]==0].reset_index(drop=True)
+            x_start_df = pandas.read_sql('SELECT * from waveforms WHERE x_idx=0', sqlite3_connection)
             x_start_var = x_start_df["x"].var()
             average_waveform_df = waveforms_df.groupby(["channel_idx", "waveform_idx", "x_idx"]).mean().drop(columns=["n_trigger"])
 
             #print(x_start_df)
+            print(waveforms_df)
+            print(average_waveform_df)
 
             plot_dir = Mike.task_path#/"summary"
             plot_dir.resolve()
