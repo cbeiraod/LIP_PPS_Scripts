@@ -33,6 +33,22 @@ To list available software collections: `scl -l`
 
 To activate a specific one: `scl enable [collection] bash`
 
+### lxbatch
+
+Useful links:
+- https://batchdocs.web.cern.ch/
+- https://twiki.cern.ch/twiki/bin/view/ABPComputing/LxBatch - The links mostly point to the url above
+- https://twiki.cern.ch/twiki/bin/view/ABPComputing/LxbatchHTCondor
+- https://twiki.cern.ch/twiki/pub/LCG/WhiteAreas/lsf.pdf - Instructions for LSF (LSF decommissioned?)
+
+#### HTCondor
+
+- `condor_q`: To list jobs in queues?
+- `condor_userprio`: to list user priorities
+- `condor_submit`: to submit jobs with a submit file
+- `condor_wait`: To monitor a job without repeated calls to `condor_q`, eg: `condor_wait -status log/hello.10934689.log`
+
+
 ## Scripts
 - `convert_scope_data.py`: This script converts a set of binary file of data taken with the Infiniium osciloscope, each file subsequently called and associated with a run, into the data format used in the LIP PPS LGAD analysis framework
 - `summarise_pulse_waveforms.py`: WIP This script fetches high level data from runs of pulses
