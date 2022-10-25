@@ -52,4 +52,5 @@ Useful links:
 ## Scripts
 - `convert_scope_data.py`: This script converts a set of binary file of data taken with the Infiniium osciloscope, each file subsequently called and associated with a run, into the data format used in the LIP PPS LGAD analysis framework
 - `summarise_pulse_waveforms.py`: WIP This script fetches high level data from runs of pulses
-- `convert_csv_to_sqlite.py`: This scripts converts a csv file with measurement data into an sqlite file, which is used by default in the other scripts
+- `convert_csv_to_sqlite.py`: This script converts a csv file with measurement data into an sqlite file, which is used by default in the other scripts
+- `plot_IV_curve.py`: This script plots the IV curve of previously acquired data. It also has the possibility to set reference curves in order to compare the acquired data
