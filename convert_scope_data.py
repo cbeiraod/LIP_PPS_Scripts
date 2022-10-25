@@ -104,7 +104,11 @@ def script_main(
             #    script_logger.info("Deleting old database file")
             #    (output_directory/'waveforms.sqlite').unlink()
 
-            with sqlite3.connect(John.path_directory/'waveforms.sqlite') as sqlite3_connection:
+            # Create data directory
+            data_dir = John.path_directory/"data"
+            data_dir.mkdir()
+
+            with sqlite3.connect(data_dir/'waveforms.sqlite') as sqlite3_connection:
                 waveforms_df = pandas.DataFrame()
                 waveform_buffer_df = pandas.DataFrame()
                 run_metadata_df = pandas.DataFrame()
