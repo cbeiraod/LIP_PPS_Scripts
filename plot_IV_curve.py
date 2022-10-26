@@ -10,7 +10,7 @@ import plotly.express as px
 
 import lip_pps_run_manager as RM
 
-def script_main(run_directory: Path, device_name: str, reference_curves = []):
+def script_main(run_directory: Path, device_name: str, reference_curves = [], measurement_name = "LIP"):
     script_logger = logging.getLogger('plot_IV_curve')
 
     with RM.RunManager(run_directory.resolve()) as Michael:
@@ -25,7 +25,7 @@ def script_main(run_directory: Path, device_name: str, reference_curves = []):
 
             with sqlite3.connect(sqlite_file) as sqlite3_connection:
                 measurements_df = pandas.read_sql('SELECT * FROM measurements', sqlite3_connection, index_col=None)
-                measurements_df["measurement"] = "LIP"
+                measurements_df["measurement"] = measurement_name
 
                 for curve in reference_curves:
                     name = curve["name"]
@@ -38,6 +38,9 @@ def script_main(run_directory: Path, device_name: str, reference_curves = []):
 
                     if data_type == "feather":
                         reference_curve_df = pandas.read_feather(location)
+                    elif data_type == "sqlite":
+                        with sqlite3.connect(location) as new_sqlite3_connection:
+                            reference_curve_df = pandas.read_sql('SELECT * FROM measurements', new_sqlite3_connection, index_col=None)
                     else:
                         continue
 
@@ -129,6 +132,20 @@ if __name__ == '__main__':
             "type": "feather",
             "invert": True,
         },
+        {
+            "name": "LIP - Low Resolution",
+            "location": Path("/Users/cristovao/CERNBOX_LGAD/Data/20221021-Device27-IV/data/measurements.sqlite"),
+            "type": "sqlite",
+            "invert": False,
+        },
+        {
+            "name": "LIP - TI_220",
+            "location": Path("/Users/cristovao/CERNBOX_LGAD/Data/20221021-Device220-IV/data/measurements.sqlite"),
+            "type": "sqlite",
+            "invert": False,
+        },
     ]
 
-    script_main(Path(args.directory), args.device, reference_curves)
+    measurement_name = "LIP - High Resolution"
+
+    script_main(Path(args.directory), args.device, reference_curves, measurement_name)
